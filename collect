@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# .tar.gz
+for tgz in `find $1 -name \*.tar.gz`; do
+  tar -zxvf $tgz
+done
+
+if [ $# -lt 0 ]; then
+  echo "specify the directory to search"
+  exit 1
+fi
+
+find $1 -name \*.rb | xargs -I {} collect_recipes {}
+
+echo Ok
