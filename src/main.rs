@@ -6,7 +6,7 @@ use tokio::process::Command;
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 const SIZE: i32 = 10;
 
-#[derive(Debug, Deserialize, Clone)]
+#[derive(Deserialize, Clone)]
 struct Cookbook {
 	cookbook_name: String,
 	cookbook_description: String,
@@ -14,7 +14,7 @@ struct Cookbook {
     cookbook_maintainer: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 struct SuperResponse {
 	start: i32,
 	total: i32,
@@ -29,10 +29,10 @@ async fn main() -> Result<()> {
 	let response = response.json::<SuperResponse>().await?;
 
 	let mut start = 0;
-	let total = 3; //response.total;
+	let total = response.total;
 	url.push_str("?item=10&start=");
 
-	loop {		
+	loop {
 		// url set
 		let num_str = start.to_string(); 
 		let add_url = url.clone() + &num_str;
@@ -43,18 +43,16 @@ async fn main() -> Result<()> {
 
 		// download 10 entry
 		for res in response.items.to_vec() {
-			let child = Command::new("knife").arg("supermarket").arg("download") 	//ここ直す
-				.arg(res.cookbook_name)												//DLしてない
+			let child = Command::new("knife").arg("supermarket").arg("download")
+				.arg(res.cookbook_name)											
 				.spawn();
-
-			match child {
-				Err(_) => {
-					println!("failed: {}", res.cookbook);
-				},
-				Ok(_) => {
-					println!("ok: {}", res.cookbook);
-				}
-			}
+			//	.expect("failed to start dl")
+			//	.wait()
+			//	.await; 
+			//
+			//if let Ok(_) = child {
+			//	println!("ok: {}", res.cookbook);
+			//}
 		}
 
 		// index set
