@@ -45,14 +45,14 @@ async fn main() -> Result<()> {
 		for res in response.items.to_vec() {
 			let child = Command::new("knife").arg("supermarket").arg("download")
 				.arg(res.cookbook_name)											
-				.spawn();
-			//	.expect("failed to start dl")
-			//	.wait()
-			//	.await; 
-			//
-			//if let Ok(_) = child {
-			//	println!("ok: {}", res.cookbook);
-			//}
+				.spawn()
+				.expect("failed to start dl")
+				.wait()
+				.await; 
+			
+			if let Ok(_) = child {
+				println!("ok: {}", res.cookbook);
+			}
 		}
 
 		// index set
