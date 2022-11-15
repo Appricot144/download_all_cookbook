@@ -42,6 +42,9 @@ async fn main() -> Result<()> {
 	let total = response.total;
 	url.push_str("?items=10&start=");
 
+	let mut success = 0;
+	let mut failed = 0;
+	
 	loop {
 		// set url
 		let num_str = start.to_string();
@@ -59,8 +62,15 @@ async fn main() -> Result<()> {
 				.wait()
 				.await; 
 			
-			if let Ok(_) = child {
-				println!("ok: {}", res.cookbook);
+			match child {
+				Ok(_) => {
+					println!("ok: {}", res.cookbook);
+					success += 1;
+				},
+				Err(_) => {
+					println!("error: {}", res.cookbook);
+					failed += 1;
+				}
 			}
 		}
 
@@ -69,5 +79,7 @@ async fn main() -> Result<()> {
 
 		if start >= total { break }
 	}
+	println!("s/total : {}/{}", success, success+failed);
+	
 	Ok(())
 }
