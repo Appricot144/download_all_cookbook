@@ -1,8 +1,12 @@
 #!/bin/bash
 
+# usage: collect <directory>
+# <directory>内の.tar.gzファイルを<directory>展開する
+# <directory>以下から.rbファイルを探して、mongodbに登録する
+
 # .tar.gz
 for tgz in `find $1 -name \*.tar.gz`; do
-  tar -zxvf $tgz
+  tar -zxf $tgz -C $1
 done
 
 if [ $# -lt 0 ]; then
