@@ -1,8 +1,10 @@
 #!/bin/bash
 
-# usage: collect <directory>
+# usage: collect <FULL PATH directory>
 # <directory>内の.tar.gzファイルを<directory>展開する
 # <directory>以下から.rbファイルを探して、mongodbに登録する
+
+start_time=`date "+%Y-%m-%d %H:%M:%S"`
 
 # .tar.gz
 for tgz in `find $1 -name \*.tar.gz`; do
@@ -15,5 +17,9 @@ if [ $# -lt 0 ]; then
 fi
 
 find $1 -name \*.rb | xargs -I {} collect_recipes {}
+
+end_time=`date "+%Y-%m-%d %H:%M:%S"`
+echo $start_time
+echo $end_time
 
 echo Ok
